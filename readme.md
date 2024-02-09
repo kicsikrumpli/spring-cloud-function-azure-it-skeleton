@@ -1,7 +1,11 @@
 # Notes
 
 ## todo!
-...
+- add an http trigger to function app (eg echo)
+- start function app with `azure-functions:run` in pre-integration test phase
+  - programmatically start from tests pre class?
+- make an http request to function app from integration test suite
+- stop function app in post-integration test phase
 
 ## Project Skeleton
 - [spring starter](https://start.spring.io) with dependencies:
@@ -126,4 +130,52 @@ The schema for the Failsafe XML reports is available at Failsafe XML Report Sche
 For an HTML format of the report, please see the Maven Surefire Report Plugin.
 By default this plugin generates summary XML file at ${basedir}/target/failsafe-reports/failsafe-summary.xml and the schema is available at Failsafe XML Summary Schema.
 
+# Test Run Function App Locally
 
+1. run function app with `./mvnw package azure-functions:run`
+2. make test http request to function app: `http POST 'http://localhost:7071/api/echo' --raw foobarblablup`
+
+response:
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Date: Fri, 09 Feb 2024 14:15:28 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+foobarblablup
+```
+
+## Caveats
+### mvn package
+will not run without package, azure functions plugin executes from local build cache
+
+### Main Class
+must declare main class, eg. with pom property:
+```xml
+	<properties>
+		<start-class>com.example.demo.DemoApplication</start-class>
+	</properties>
+```
+
+Otherwise receive error when making request to started app: 
+> java.lang.IllegalStateException: Failed to discover main class. An attempt was made to discover main class as 'MAIN_CLASS' environment variable, system property as well as entry in META-INF/MANIFEST.MF
+
+And receive 500 response to http call
+
+### Packaging
+Spring Boot Maven Plugin packaging is incompatible, add additional dependency:
+
+```xml
+  <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <dependencies>
+          <dependency>
+              <groupId>org.springframework.boot.experimental</groupId>
+              <artifactId>spring-boot-thin-layout</artifactId>
+              <version>1.0.31.RELEASE</version>
+          </dependency>
+      </dependencies>
+  </plugin>
+```

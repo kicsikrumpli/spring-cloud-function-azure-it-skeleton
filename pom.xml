@@ -18,6 +18,10 @@
 		<java.version>17</java.version>
 		<spring-cloud-azure.version>5.8.0</spring-cloud-azure.version>
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
+
+		<start-class>com.example.demo.DemoApplication</start-class>
+		<!-- hostJson>${project.basedir}/src/main/resources/host.json</hostJson -->
+
 	</properties>
 
 	<dependencies>
@@ -72,6 +76,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>com.microsoft.azure</groupId>
 				<artifactId>azure-functions-maven-plugin</artifactId>
@@ -88,7 +93,7 @@
 
 					<runtime>
 						<os>linux</os>
-						<javaVersion>11</javaVersion>
+						<javaVersion>17</javaVersion>
 					</runtime>
 
 					<appSettings>
@@ -119,6 +124,14 @@
 						</exclude>
 					</excludes>
 				</configuration>
+				<dependencies>
+					<!-- Spring Boot packaging is incompatible with Azure Function packaging -->
+					<dependency>
+						<groupId>org.springframework.boot.experimental</groupId>
+						<artifactId>spring-boot-thin-layout</artifactId>
+						<version>1.0.31.RELEASE</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 			<!-- Integration Test Setup -->
