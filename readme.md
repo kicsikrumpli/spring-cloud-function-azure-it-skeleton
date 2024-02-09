@@ -1,13 +1,7 @@
 # Notes
 
 ## todo!
-- add integration test folder to test sources: build-helper-maven-plugin
-- exclude integration test folder for surefire plugin
-- include integration test folder for failsafe plugin
-  - NB! source patterns: 
-    - `IT*.java`, 
-    - `*IT.java`, 
-    - `*ITCase.java`
+...
 
 ## Project Skeleton
 - [spring starter](https://start.spring.io) with dependencies:
@@ -67,8 +61,32 @@ Add Azure Functions Maven plugin:
 ## Integration Test setup
 see [Failsafe Plugin documentation](https://maven.apache.org/surefire/maven-failsafe-plugin/)
 
-> when running integration tests, you should invoke Maven with the (shorter to type too) `mvn verify` rather than trying to invoke the integration-test phase directly, as otherwise the post-integration-test phase will not be executed.
+### integration test directory
+- add integration tests in separate source folder: `src/it/test`
+- add integration test directory to sources with `build-helper-maven-plugin`:
+```xml
+  <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>build-helper-maven-plugin</artifactId>
+      <version>3.5.0</version>
+      <executions>
+          <execution>
+              <id>add-test-source</id>
+              <phase>generate-sources</phase>
+              <goals>
+                  <goal>add-test-source</goal>
+              </goals>
+              <configuration>
+                  <sources>
+                      <source>src/it/java</source>
+                  </sources>
+              </configuration>
+          </execution>
+      </executions>
+  </plugin>
+```
 
+### Failsafe Plugin
 Add Failsafe Maven plugin:
 ```xml
     <plugin>
@@ -76,9 +94,15 @@ Add Failsafe Maven plugin:
         <version>3.2.5</version>
         <executions>
             <execution>
+                <configuration>
+                      <testSourceDirectory>src/it/java</testSourceDirectory>
+                      <includes>
+                          <include>**/*IT.java</include>
+                      </includes>
+                </configuration>
                 <goals>
-                    <goal>integration-test</goal>
-                    <goal>verify</goal>
+                      <goal>integration-test</goal>
+                      <goal>verify</goal>
                 </goals>
             </execution>
         </executions>

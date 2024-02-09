@@ -162,20 +162,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- 3. exclude integration test classes for surefire plugin -->
-			<!-- plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
-				<configuration>
-					<excludes>
-						<exclude>**/it/**</exclude>
-					</excludes>
-				</configuration>
-			</plugin -->
-
-
 		</plugins>
 	</build>
 
