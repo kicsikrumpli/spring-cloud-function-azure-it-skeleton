@@ -1,11 +1,17 @@
 # Notes
 
 ## todo!
-- add an http trigger to function app (eg echo)
-- start function app with `azure-functions:run` in pre-integration test phase
-  - programmatically start from tests pre class?
-- make an http request to function app from integration test suite
-- stop function app in post-integration test phase
+- [x] add an http trigger to function app (eg echo)
+- [x] start function app locally with `azure-functions:run`
+- [x] make request manually w/ httpie
+- 
+- [ ] programmatically start function app for tests
+  - in pre-integration test phase
+  - in integration test phase with pre-class hook
+- [ ] make an http request to function app from integration test suite
+- [ ] programmatically stop function app 
+  - in post-integration test phase
+  - in integration test phase with post-class hook
 
 ## Project Skeleton
 - [spring starter](https://start.spring.io) with dependencies:
