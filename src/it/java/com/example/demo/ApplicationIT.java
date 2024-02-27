@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +20,8 @@ public class ApplicationIT {
     @Autowired
     private ThingRepository repo;
 
+    private final RestTemplate restTemplate = new RestTemplate();
+
     @Test
     void testRepo() {
         System.out.println("##it");
@@ -28,6 +32,15 @@ public class ApplicationIT {
                 .collect(Collectors.toSet());
 
         log.info("Found entities: {}", all);
+    }
+
+    @Test
+    void testFnAppRequest() {
+        var endpoint = "http://localhost:7071/api/save_and_find_all";
+        log.info("POST Fn App endpoint {}", endpoint);
+
+        String res = restTemplate.postForObject(URI.create(endpoint), "blaaaaargh", String.class);
+        log.info("Received response from Fn App: {}", res);
     }
 
 }

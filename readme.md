@@ -2,24 +2,30 @@
 This is an experimental setup for running integration tests for Azure Function in a development environment that lacks Docker (don't ask...).
 
 ## todo!
+done:
+--- 
 - [x] add an http trigger to function app (eg echo)
 - [x] start function app locally with `azure-functions:run`
 - [x] make request manually w/ httpie
-- [ ] programmatically start function app for tests
+- [x] programmatically start function app for tests
   - in pre-integration test phase
-  - ~~in integration test phase with pre-class hook~~
+  - ~~in integration test phase with before-class hook~~
 - [x] add spring data repository 
 - [x] use spring data repo in test code
+- [x] make an http request to function app from integration test suite
+- [x] programmatically stop function app 
+  - in post-integration test phase
+  - ~~in integration test phase with after-class hook~~
+  - `<asyncDestroyOnShutdown>true</asyncDestroyOnShutdown>`
 
+next:
 ---
+- [ ] configure function app and integration test to connect to the same db
 
-- [ ] make an http request to function app from integration test suite
+won't do:
+---
 - [ ] add event grid trigger to function app
 - [ ] invoke function app via event grid trigger with http request
-- [ ] programmatically stop function app 
-  - in post-integration test phase
-  - in integration test phase with post-class hook
-  - maybe: `<asyncDestroyOnShutdown>true</asyncDestroyOnShutdown>`
 
 notes:
 - manually run non-http trigger function app: https://learn.microsoft.com/en-us/azure/azure-functions/functions-manually-run-non-http?tabs=azure-portal
