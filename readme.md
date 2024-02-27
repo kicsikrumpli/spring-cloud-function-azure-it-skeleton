@@ -5,17 +5,17 @@ This is an experimental setup for running integration tests for Azure Function i
 - [x] add an http trigger to function app (eg echo)
 - [x] start function app locally with `azure-functions:run`
 - [x] make request manually w/ httpie
-- [x] programmatically start function app for tests
+- [ ] programmatically start function app for tests
   - in pre-integration test phase
   - ~~in integration test phase with pre-class hook~~
 - [x] add spring data repository 
+- [x] use spring data repo in test code
 
 ---
 
 - [ ] make an http request to function app from integration test suite
 - [ ] add event grid trigger to function app
 - [ ] invoke function app via event grid trigger with http request
-- [ ] use spring data repo in test code
 - [ ] programmatically stop function app 
   - in post-integration test phase
   - in integration test phase with post-class hook
