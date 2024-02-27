@@ -8,13 +8,18 @@ This is an experimental setup for running integration tests for Azure Function i
 - [x] programmatically start function app for tests
   - in pre-integration test phase
   - ~~in integration test phase with pre-class hook~~
+- [x] add spring data repository 
 
 ---
 
 - [ ] make an http request to function app from integration test suite
+- [ ] add event grid trigger to function app
+- [ ] invoke function app via event grid trigger with http request
+- [ ] use spring data repo in test code
 - [ ] programmatically stop function app 
   - in post-integration test phase
   - in integration test phase with post-class hook
+  - maybe: `<asyncDestroyOnShutdown>true</asyncDestroyOnShutdown>`
 
 notes:
 - manually run non-http trigger function app: https://learn.microsoft.com/en-us/azure/azure-functions/functions-manually-run-non-http?tabs=azure-portal
@@ -225,3 +230,8 @@ Spring Boot Maven Plugin packaging is incompatible, add additional dependency:
         </plugin>
     </plugins>
 </build>
+
+## Embedded H2 db
+- https://www.baeldung.com/spring-boot-h2-database
+- https://docs.spring.io/spring-boot/docs/current/reference/html/data.html
+- 
