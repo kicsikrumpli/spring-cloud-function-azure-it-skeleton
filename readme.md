@@ -1,24 +1,32 @@
 # Notes
+This is an experimental setup for running integration tests for Azure Function in a development environment that lacks Docker (don't ask...).
 
 ## todo!
 - [x] add an http trigger to function app (eg echo)
 - [x] start function app locally with `azure-functions:run`
 - [x] make request manually w/ httpie
-- 
-- [ ] programmatically start function app for tests
+- [x] programmatically start function app for tests
   - in pre-integration test phase
-  - in integration test phase with pre-class hook
+  - ~~in integration test phase with pre-class hook~~
+
+---
+
 - [ ] make an http request to function app from integration test suite
 - [ ] programmatically stop function app 
   - in post-integration test phase
   - in integration test phase with post-class hook
+
+notes:
+- manually run non-http trigger function app: https://learn.microsoft.com/en-us/azure/azure-functions/functions-manually-run-non-http?tabs=azure-portal
+- 
 
 ## Project Skeleton
 - [spring starter](https://start.spring.io) with dependencies:
   - Lombok
   - Spring Cloud Function
   - Azure Support
-  - Azure Cosmos DB
+  - ~~Azure Cosmos DB~~
+    - there is no cosmosdb emulator available for M1 mac :/
 
 ## Azure Function App dependencies
 Add Azure Adapter dependency
@@ -185,3 +193,35 @@ Spring Boot Maven Plugin packaging is incompatible, add additional dependency:
       </dependencies>
   </plugin>
 ```
+
+---
+
+<build>
+    <plugins>
+        <!-- Other plugins and configurations -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>start-web-app</id>
+                    <phase>pre-integration-test</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <executable>java</executable>
+                        <arguments>
+                            <argument>-jar</argument>
+                            <argument>path/to/your/web-app.jar</argument>
+                            <!-- Add other configuration options as needed -->
+                        </arguments>
+                        <detach>true</detach>
+                    </configuration>
+                </execution>
+                <!-- Add more executions as needed -->
+            </executions>
+        </plugin>
+    </plugins>
+</build>

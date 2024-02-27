@@ -20,6 +20,7 @@
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
 
 		<start-class>com.example.demo.DemoApplication</start-class>
+		<functionAppName>arbitrary-app-name</functionAppName>
 		<!-- hostJson>${project.basedir}/src/main/resources/host.json</hostJson -->
 
 	</properties>
@@ -29,10 +30,16 @@
 			<groupId>com.azure.spring</groupId>
 			<artifactId>spring-cloud-azure-starter</artifactId>
 		</dependency>
-		<dependency>
+		<!-- no local cosmosdb emulator available for m1 mac -->
+		<!-- dependency>
 			<groupId>com.azure.spring</groupId>
 			<artifactId>spring-cloud-azure-starter-data-cosmos</artifactId>
-		</dependency>
+		</dependency -->
+		<!-- use any other spring data repo for POC -->
+		<!-- dependency>
+			<groupId></groupId>
+			<artifactId></artifactId>
+		</dependency -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-function-context</artifactId>
@@ -83,7 +90,7 @@
 				<version>1.31.0</version>
 
 				<configuration>
-					<appName>arbitrary-app-name</appName>
+					<appName>${functionAppName}</appName>
 					<resourceGroup>YOUR-AZURE-FUNCTION-RESOURCE-GROUP</resourceGroup>
 					<region>YOUR-AZURE-FUNCTION-APP-REGION</region>
 					<appServicePlanName>YOUR-AZURE-FUNCTION-APP-SERVICE-PLANE-NAME</appServicePlanName>
@@ -172,6 +179,48 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Set Up Integration Test Environment - start dependencies -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>start-azure-function-app</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<!--
+								"func" requires azure core tools:
+								https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-java
+							-->
+							<executable>func</executable>
+							<arguments>
+								<argument>start</argument>
+							</arguments>
+							<workingDirectory>${project.build.directory}/azure-functions/${functionAppName}</workingDirectory>
+							<async>true</async>
+							<asyncDestroyOnShutdown>true</asyncDestroyOnShutdown>
+						</configuration>
+					</execution>
+					<execution>
+						<id>sleep</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>sleep</executable>
+							<arguments>
+								<argument>20</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
